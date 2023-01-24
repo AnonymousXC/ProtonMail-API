@@ -108,3 +108,4 @@ dist
 package-lock.json
 /testing
 /lib
+.gitpod.yml

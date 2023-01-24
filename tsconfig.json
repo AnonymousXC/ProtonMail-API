@@ -8,6 +8,8 @@
     "strict": true,                                      /* Enable all strict type-checking options. */
     "moduleResolution": "Node",
     "allowJs": true,
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true
   },
   "include": ["src", "index.ts", "**/*.ts", "*.ts"],
   "exclude": ["node_modules", "**/__test__/**", "testing", "lib"]
