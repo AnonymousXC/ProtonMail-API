@@ -1,4 +1,5 @@
 import puppeteer, { Page, Browser } from "puppeteer";
+import UserAgent from 'user-agents';
 
 interface UserConfig {
     username: string,
@@ -11,6 +12,7 @@ class ProtonMail {
     _Password : string;
     _BROWSER : Promise<Browser> | any;
     _PAGE : Promise<Page> | any;
+    INVALID_LOGIN : boolean;
 
     constructor(config : UserConfig) {
         this._BROWSER = null;
@@ -23,13 +25,14 @@ class ProtonMail {
     }
 
     async congifurePuppeteer() {
+        const userAgent = new UserAgent()
+        console.log(userAgent);
         const _BROWSER = await puppeteer.launch({ headless: true })
         const _PAGE = await _BROWSER.newPage();
         await this.loginProton(_PAGE)
     }
 
     async loginProton(PAGE : Page) {
-        let invalidLogin : boolean = false
         await PAGE.goto('https://account.proton.me/login', { waitUntil: 'networkidle0' })
         await PAGE.waitForSelector('body > div.app-root > div.flex-no-min-children.flex-nowrap.flex-column.h100.sign-layout-bg.scroll-if-needed.relative > div.sign-layout-container.flex-item-fluid-auto.flex.flex-nowrap.flex-column.flex-justify-space-between > div > main > div.sign-layout-main-content > form > button')
         await PAGE.type('#username', this._Username)
@@ -40,7 +43,7 @@ class ProtonMail {
                 console.log("Logged in"); 
             })
             .catch(err => {  
-                invalidLogin = true;
+                this.INVALID_LOGIN = true;
                 throw new Error("Invalid login.")
             })        
         await PAGE.waitForNetworkIdle({ idleTime: 250 })
