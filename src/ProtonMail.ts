@@ -7,6 +7,12 @@ interface UserConfig {
     password: string,
 }
 
+interface EmailData {
+    to: string,
+    subject: string,
+    message: string,
+}
+
 class ProtonMail {
 
     _Username : string;
@@ -21,7 +27,11 @@ class ProtonMail {
         if(!config.password) throw new Error('Password not found')
         this._Username = config.username || '';
         this._Password = config.password || '';
-        this.congifurePuppeteer()
+        this._EMAIL = new Email()
+    }
+
+    async connect() {
+        await this.congifurePuppeteer()
     }
 
     async congifurePuppeteer() {
@@ -35,7 +45,6 @@ class ProtonMail {
             deviceScaleFactor: 1
         });
         await this.loginProton(this._PAGE)
-        this._EMAIL = new Email(this._PAGE)
     }
 
     async loginProton(PAGE : Page) {
@@ -53,6 +62,11 @@ class ProtonMail {
                 throw new Error("Invalid login.")
             })        
         await PAGE.waitForNetworkIdle({ idleTime: 250 })
+        await this._EMAIL.setPage(this._PAGE)
+    }
+
+    async sendEmail(emailData : EmailData) {
+        await this._EMAIL.sendEmail(emailData)
     }
 }
 
