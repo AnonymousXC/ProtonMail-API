@@ -4,6 +4,7 @@ interface EmailData {
     to: string,
     subject: string,
     message: string,
+    debug?: boolean
 }
 
 class Email {
@@ -21,13 +22,22 @@ class Email {
     }
 
     async sendEmail(emailData : EmailData) {
+        if(emailData.debug === true)
+            await console.log("Message sending started.");
+            
         this._TO = await emailData.to;
         this._SUBJECT = await emailData.subject;
         this._MESSAGE = await emailData.message;
         await this._PAGE.click('body > div.app-root > div.flex > div > div > div > div.sidebar > div > button')
-        // await this._PAGE.waitForSelector('[data-testid="composer:to]"', {visible: true})
-        // await this._PAGE.type('[placeholder="Email address"]', this._TO)
-        // await this._PAGE.screenshot({path: 'success.png'})
+        await this._PAGE.waitForSelector('body > div.app-root > div:nth-child(5) > div > div > div > footer > div > div.button-group > button', {visible: true})
+        const emailInput = await this._PAGE.$x('//*[@placeholder="Email address"]')
+        const subjectInput = await this._PAGE.$x('//*[@placeholder="Subject"]')
+        const messageInput = await this._PAGE.$x('//*[@id="rooster-editor"]')
+        await emailInput[0].type(emailData.to)
+        await subjectInput[0].type(emailData.subject)
+
+        if(emailData.debug === true)
+            await console.log("Message send.");
     }
 }
 

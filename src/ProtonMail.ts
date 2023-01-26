@@ -11,6 +11,7 @@ interface EmailData {
     to: string,
     subject: string,
     message: string,
+    debug?: boolean,
 }
 
 class ProtonMail {
@@ -27,11 +28,17 @@ class ProtonMail {
         if(!config.password) throw new Error('Password not found')
         this._Username = config.username || '';
         this._Password = config.password || '';
-        this._EMAIL = new Email()
+        this._EMAIL = new Email();
     }
 
-    async connect() {
+    async connect(opts: { debug? : boolean}) {
+        if(opts.debug === true)
+            await console.log("Logging in.")
+
         await this.congifurePuppeteer()
+
+        if(opts.debug === true)
+            await console.log("Logging in ended.")
     }
 
     async congifurePuppeteer() {
@@ -54,9 +61,7 @@ class ProtonMail {
         await PAGE.type('#password', this._Password)
         await PAGE.click('body > div.app-root > div.flex-no-min-children.flex-nowrap.flex-column.h100.sign-layout-bg.scroll-if-needed.relative > div.sign-layout-container.flex-item-fluid-auto.flex.flex-nowrap.flex-column.flex-justify-space-between > div > main > div.sign-layout-main-content > form > button')
         await PAGE.waitForSelector('body > div.app-root > div.flex.flex-row.flex-nowrap.h100 > div > div > div > div.sidebar.flex.flex-nowrap.flex-column.no-print.outline-none > div.flex-item-fluid.flex-nowrap.flex.flex-column.scroll-if-needed.pb1 > nav')
-            .then(async () => {
-                console.log("Logged in");
-            })
+            .then(async () => {})
             .catch(err => {  
                 this.INVALID_LOGIN = true;
                 throw new Error("Invalid login.")
