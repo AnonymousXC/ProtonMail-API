@@ -33,12 +33,15 @@ class ProtonMail {
 
     async connect(opts: { debug? : boolean}) {
         if(opts.debug === true)
-            await console.log("Logging in.")
+        {
+            await console.log('connecting...')
+            await console.time('connect in')
+        }
 
         await this.congifurePuppeteer()
 
         if(opts.debug === true)
-            await console.log("Logging in ended.")
+            await console.timeLog('connect in')
     }
 
     async congifurePuppeteer() {
@@ -72,6 +75,10 @@ class ProtonMail {
 
     async sendEmail(emailData : EmailData) {
         await this._EMAIL.sendEmail(emailData)
+    }
+
+    async close() {
+        await this._BROWSER.close()
     }
 }
 

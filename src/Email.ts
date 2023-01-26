@@ -23,7 +23,10 @@ class Email {
 
     async sendEmail(emailData : EmailData) {
         if(emailData.debug === true)
-            await console.log("Message sending started.");
+        {
+            await console.log('Message sending...');
+            await console.time('message sent in')
+        }
             
         this._TO = await emailData.to;
         this._SUBJECT = await emailData.subject;
@@ -32,12 +35,20 @@ class Email {
         await this._PAGE.waitForSelector('body > div.app-root > div:nth-child(5) > div > div > div > footer > div > div.button-group > button', {visible: true})
         const emailInput = await this._PAGE.$x('//*[@placeholder="Email address"]')
         const subjectInput = await this._PAGE.$x('//*[@placeholder="Subject"]')
-        const messageInput = await this._PAGE.$x('//*[@id="rooster-editor"]')
         await emailInput[0].type(emailData.to)
         await subjectInput[0].type(emailData.subject)
 
+        /*const frames = await this._PAGE.frames()
+        const currFrame = await frames[0].content()
+        await this._PAGE.focus('body > div.app-root > div:nth-child(5) > div > div > div > div > section > div > div > div.h100.flex-item-fluid.flex.flex-column.relative.composer-content--rich-edition.pl1-75.pr1-75 > div')
+        await this._PAGE.keyboard.type(this._MESSAGE)*/
+
+        await this._PAGE.click('body > div.app-root > div:nth-child(5) > div > div > div > footer > div > div.button-group > button')
+        await this._PAGE.waitForSelector('body > div.app-root > div:nth-child(5) > div > div > div > footer > div > div.button-group > button', {hidden: true})
+        await this._PAGE.screenshot({path: 'success.png'})
+
         if(emailData.debug === true)
-            await console.log("Message send.");
+            await console.timeLog('message sent in');
     }
 }
 
