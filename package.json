@@ -1,6 +1,6 @@
 {
-  "name": "proton-mail-api",
-  "version": "1.0.0",
+  "name": "proton-email-api",
+  "version": "1.0.1",
   "type": "module",
   "description": "A simple proton mail api. To send emails using JS/TS.",
   "main": "lib/index.js",
@@ -15,20 +15,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AnonymousXC/protonm-api.git"
+    "url": "git+https://github.com/AnonymousXC/ProtonMail-API.git"
   },
   "keywords": [
     "proton",
     "proton-mail",
     "mail",
-    "proton-mail-api"
+    "proton-mail-api",
+    "typescript-api",
+    "proton-mail-ts",
+    "proton-mail-typescript",
+    "protonmail-api",
+    "protonmailapi"
   ],
   "author": "Thearcane",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AnonymousXC/protonm-api/issues"
+    "url": "https://github.com/AnonymousXC/ProtonMail-API/issues"
   },
-  "homepage": "https://github.com/AnonymousXC/protonm-api#readme",
+  "homepage": "https://github.com/AnonymousXC/ProtonMail-API#readme",
   "devDependencies": {
     "@types/user-agents": "^1.0.2",
     "typescript": "^4.9.4"

@@ -9,7 +9,7 @@ Allows interaction with ProtonMail through a simple Node.js API. Leverages the o
 ## Sending an email
 
 ```Javascript
-import ProtonMail from '../lib/index.js';
+import ProtonMail from 'proton-email-api';
 
 
 (async () {
