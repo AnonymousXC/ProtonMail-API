@@ -1,5 +1,5 @@
 {
-  "name": "protonm-api",
+  "name": "proton-mail-api",
   "version": "1.0.0",
   "type": "module",
   "description": "A simple proton mail api. To send emails using JS/TS.",
