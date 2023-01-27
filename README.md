@@ -6,6 +6,11 @@ Allows interaction with ProtonMail through a simple Node.js API. Leverages the o
 
 # Setup
 
+## Installation
+```
+npm i proton-email-api
+```
+
 ## Sending an email
 
 ```Javascript
