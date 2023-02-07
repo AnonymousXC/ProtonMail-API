@@ -5,6 +5,7 @@ import Email from './Email.js';
 interface UserConfig {
     username: string,
     password: string,
+    browserlessAPI?: string,
 }
 
 interface EmailData {
@@ -22,17 +23,19 @@ class ProtonMail {
     _PAGE : Page;
     _EMAIL : Email;
     INVALID_LOGIN : boolean;
+    BROWSERLESS_END_POINT : string;
 
     constructor(config : UserConfig) {
         if(!config.username) throw new Error('Username not found');
         if(!config.password) throw new Error('Password not found')
         this._Username = config.username || '';
         this._Password = config.password || '';
+        this.BROWSERLESS_END_POINT = config.browserlessAPI ? 'wss://chrome.browserless.io?token=' + config.browserlessAPI : '';
         this._EMAIL = new Email();
     }
 
-    async connect(opts: { debug? : boolean}) {
-        if(opts.debug === true)
+    async connect(opts? : {debug? : boolean}) {
+        if(opts?.debug === true)
         {
             await console.log('connecting...')
             await console.time('connect in')
@@ -40,20 +43,28 @@ class ProtonMail {
 
         await this.congifurePuppeteer()
 
-        if(opts.debug === true)
+        if(opts?.debug === true)
             await console.timeLog('connect in')
     }
 
     async congifurePuppeteer() {
         const userAgent = new UserAgent({deviceCategory:'desktop'})
-        this._BROWSER = await puppeteer.launch({ headless: true })
+        if(!this.BROWSERLESS_END_POINT)
+            this._BROWSER = await puppeteer.launch({ headless: true })
+        else
+            this._BROWSER = await puppeteer.connect({
+                browserWSEndpoint : this.BROWSERLESS_END_POINT
+            })
         this._PAGE = await this._BROWSER.newPage();
-        this._PAGE.setUserAgent(userAgent.data.userAgent)
-        this._PAGE.setViewport({ 
-            width: userAgent.data.viewportWidth, 
-            height: userAgent.data.viewportHeight,
-            deviceScaleFactor: 1
-        });
+        if(!this.BROWSERLESS_END_POINT)
+        {
+            this._PAGE.setUserAgent(userAgent.data.userAgent)
+            this._PAGE.setViewport({ 
+                width: userAgent.data.viewportWidth, 
+                height: userAgent.data.viewportHeight,
+                deviceScaleFactor: 1
+            });
+        }
         await this.loginProton(this._PAGE)
     }
 
